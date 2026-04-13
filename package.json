@@ -1,23 +1,13 @@
 {
   "name": "helmet-deal-finder",
   "version": "1.0.0",
-  "description": "Automated daily search for motorcycle helmet deals at 40%+ discount",
-  "main": "helmet-finder-sheets.js",
+  "description": "Automated daily search for motorcycle helmet deals",
+  "main": "helmet-finder.js",
   "scripts": {
-    "start": "node helmet-finder.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node helmet-finder.js"
   },
-  "keywords": [
-    "motorcycle",
-    "helmets",
-    "deals",
-    "automation",
-    "web-scraping"
-  ],
-  "author": "Ben Schreiber",
-  "license": "MIT",
   "dependencies": {
-    "nodemailer": "^6.9.7"
+    "googleapis": "^118.0.0"
   },
   "engines": {
     "node": ">=16.0.0"
