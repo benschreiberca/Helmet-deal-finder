@@ -1,0 +1,25 @@
+# 🏍️ Motorcycle Helmet Deal Finder
+
+Automated daily search for XL modular motorcycle helmets at 40%+ discount across 13 Canadian and international retailers.
+
+## Setup
+
+See SETUP.md in the outputs folder you downloaded for complete instructions.
+
+## What It Does
+
+- Searches daily across FortNine, GP Bikes, ADM Sport, Studio Cycle, RidingGear, Royal Distributing, Champion Helmets, Peakboys, Blackfoot Online, Joe Rocket, Speed & Strength, RevZilla, and Amazon.ca
+- Finds deals on: Bell SRT Modular, Shoei Neotec 3, Shoei Neotec 2, HJC RPHA 91, HJC i91, HJC i100, AGV sportmodular, AGV tourmodular, LS2 Advant X, LS2 Advant X 2 Carbon
+- Alerts you via email when 40%+ discount deals are found
+- Completely automated with GitHub Actions
+
+## Configuration
+
+Add these secrets in Settings → Secrets and Variables → Actions:
+- `HELMET_ALERT_EMAIL` - Your email
+- `SMTP_USER` - Gmail address
+- `SMTP_PASS` - Gmail app password
+
+## Status
+
+View automation status in the **Actions** tab.
