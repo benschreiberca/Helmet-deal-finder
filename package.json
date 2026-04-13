@@ -2,7 +2,7 @@
   "name": "helmet-deal-finder",
   "version": "1.0.0",
   "description": "Automated daily search for motorcycle helmet deals at 40%+ discount",
-  "main": "helmet-finder.js",
+  "main": "helmet-finder-sheets.js",
   "scripts": {
     "start": "node helmet-finder.js",
     "test": "echo \"Error: no test specified\" && exit 1"
