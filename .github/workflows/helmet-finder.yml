@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm install nodemailer
+        run: npm install googleapis
       
       - name: Run helmet deal finder
         env:
