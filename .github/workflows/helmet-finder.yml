@@ -26,11 +26,10 @@ jobs:
         run: npm install googleapis
       
       - name: Run helmet deal finder
-        env:
-          ALERT_EMAIL: ${{ secrets.HELMET_ALERT_EMAIL }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-        run: node helmet-finder.js
+  env:
+    SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+    GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+  run: node helmet-finder-sheets.js
       
       - name: Log results
         if: always()
