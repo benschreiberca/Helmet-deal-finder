@@ -1,0 +1,37 @@
+name: Daily Helmet Deal Finder
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC (adjust to your timezone below)
+    - cron: '0 9 * * *'
+  
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  find-deals:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install nodemailer
+      
+      - name: Run helmet deal finder
+        env:
+          ALERT_EMAIL: ${{ secrets.HELMET_ALERT_EMAIL }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: node helmet-finder.js
+      
+      - name: Log results
+        if: always()
+        run: echo "Deal finder execution completed"
