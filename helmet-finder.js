@@ -3,11 +3,13 @@
 /**
  * Motorcycle Helmet Deal Finder
  * Searches multiple vendors daily for XL modular helmets at 40%+ discount
- * Sends email alerts when deals found
+ * Writes results to Google Sheets
  */
 
 const https = require('https');
-const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
 
 // Configuration
 const HELMETS = [
@@ -40,11 +42,9 @@ const VENDORS = [
 ];
 
 const DISCOUNT_THRESHOLD = 0.40; // 40% off
-const USER_EMAIL = process.env.ALERT_EMAIL || 'ben@benschreiber.ca';
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const GOOGLE_CREDENTIALS = process.env.GOOGLE_CREDENTIALS;
 
-// In-memory storage for deals found (in production, use a database)
 let dealsFound = [];
 
 /**
@@ -112,102 +112,107 @@ function parseHtmlForDeals(html, helmet, vendor) {
 }
 
 /**
- * Send email notification
+ * Authenticate with Google Sheets API
  */
-async function sendEmailAlert(deals) {
-  if (!SMTP_USER || !SMTP_PASS) {
-    console.log('SMTP credentials not configured. Skipping email.');
-    console.log(`Found ${deals.length} deals:`, deals);
+async function authenticate() {
+  if (!GOOGLE_CREDENTIALS) {
+    console.log('GOOGLE_CREDENTIALS not set. Skipping Google Sheets update.');
+    return null;
+  }
+
+  try {
+    const credentials = JSON.parse(GOOGLE_CREDENTIALS);
+    
+    const auth = new google.auth.GoogleAuth({
+      credentials: credentials,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+
+    return auth;
+  } catch (error) {
+    console.error('Failed to authenticate with Google:', error.message);
+    return null;
+  }
+}
+
+/**
+ * Write deals to Google Sheets
+ */
+async function writeToGoogleSheets(auth, deals) {
+  if (!auth || !SPREADSHEET_ID) {
+    console.log('Skipping Google Sheets write.');
     return;
   }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS
-    }
-  });
-
-  const htmlContent = generateEmailHtml(deals);
-
-  const mailOptions = {
-    from: SMTP_USER,
-    to: USER_EMAIL,
-    subject: `🏍️ Helmet Deal Alert: ${deals.length} deals found (40%+ off)`,
-    html: htmlContent,
-    text: generateEmailText(deals)
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${USER_EMAIL}`);
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    // Prepare data for sheet
+    const rows = deals.map(deal => [
+      new Date(deal.timestamp).toLocaleString(),
+      deal.helmet,
+      deal.vendor,
+      `$${deal.price.toFixed(2)}`,
+      `${deal.discount}%`,
+      deal.url
+    ]);
+
+    // Append to sheet
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: 'Deals!A:F',
+      valueInputOption: 'USER_ENTERED',
+      resource: {
+        values: rows
+      }
+    });
+
+    console.log(`✅ Wrote ${deals.length} deals to Google Sheets`);
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error writing to Google Sheets:', error.message);
   }
 }
 
 /**
- * Generate HTML email content
+ * Initialize Google Sheet headers (if needed)
  */
-function generateEmailHtml(deals) {
-  const rows = deals.map(deal => `
-    <tr>
-      <td style="padding: 10px; border-bottom: 1px solid #ddd;">${deal.helmet}</td>
-      <td style="padding: 10px; border-bottom: 1px solid #ddd;">${deal.vendor}</td>
-      <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">$${deal.price.toFixed(2)}</td>
-      <td style="padding: 10px; border-bottom: 1px solid #ddd; color: green; font-weight: bold;">${deal.discount}% off</td>
-      <td style="padding: 10px; border-bottom: 1px solid #ddd;"><a href="${deal.url}">View</a></td>
-    </tr>
-  `).join('');
+async function initializeSheet(auth) {
+  if (!auth || !SPREADSHEET_ID) {
+    return;
+  }
 
-  return `
-    <html>
-      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <h2>🏍️ Motorcycle Helmet Deals Found!</h2>
-        <p>Found <strong>${deals.length}</strong> deals at 40%+ discount for XL modular helmets:</p>
-        
-        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-          <thead>
-            <tr style="background-color: #f2f2f2;">
-              <th style="padding: 10px; text-align: left;">Helmet Model</th>
-              <th style="padding: 10px; text-align: left;">Vendor</th>
-              <th style="padding: 10px; text-align: left;">Price (CAD)</th>
-              <th style="padding: 10px; text-align: left;">Discount</th>
-              <th style="padding: 10px; text-align: left;">Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-        
-        <p style="font-size: 0.9em; color: #666;">
-          Last checked: ${new Date().toLocaleString()}<br>
-          Threshold: 40% off minimum
-        </p>
-      </body>
-    </html>
-  `;
-}
+  try {
+    const sheets = google.sheets({ version: 'v4', auth });
 
-/**
- * Generate plain text email content
- */
-function generateEmailText(deals) {
-  let text = `MOTORCYCLE HELMET DEALS FOUND!\n\nFound ${deals.length} deals at 40%+ discount:\n\n`;
-  
-  deals.forEach(deal => {
-    text += `${deal.helmet}\n`;
-    text += `  Vendor: ${deal.vendor}\n`;
-    text += `  Price: $${deal.price.toFixed(2)} CAD\n`;
-    text += `  Discount: ${deal.discount}% off\n`;
-    text += `  Link: ${deal.url}\n\n`;
-  });
-  
-  return text;
+    // Check if headers exist
+    const result = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: 'Deals!A1:F1'
+    });
+
+    if (!result.data.values || result.data.values.length === 0) {
+      // Add headers
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: 'Deals!A1:F1',
+        valueInputOption: 'USER_ENTERED',
+        resource: {
+          values: [[
+            'Timestamp',
+            'Helmet Model',
+            'Vendor',
+            'Price (CAD)',
+            'Discount',
+            'Vendor URL'
+          ]]
+        }
+      });
+
+      console.log('✅ Initialized Google Sheet headers');
+    }
+  } catch (error) {
+    console.error('Error initializing sheet:', error.message);
+  }
 }
 
 /**
@@ -244,8 +249,12 @@ async function main() {
       console.log(`  • ${deal.helmet} at ${deal.vendor}: $${deal.price.toFixed(2)} (${deal.discount}% off)`);
     });
     
-    // Send email alert
-    await sendEmailAlert(dealsFound);
+    // Write to Google Sheets
+    const auth = await authenticate();
+    if (auth) {
+      await initializeSheet(auth);
+      await writeToGoogleSheets(auth, dealsFound);
+    }
   } else {
     console.log('No deals found at this time.');
   }
