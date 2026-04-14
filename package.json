@@ -7,9 +7,10 @@
     "start": "node helmet-finder.js"
   },
   "dependencies": {
+    "cheerio": "^1.0.0",
     "googleapis": "^118.0.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   }
 }
