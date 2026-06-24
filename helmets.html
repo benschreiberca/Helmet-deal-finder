@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XL Modular Helmets — Deal Finder Reference</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      max-width: 900px;
+      margin: 0 auto 2.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #f8fafc;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      background: #1e40af;
+      color: #bfdbfe;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      letter-spacing: 0.4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1e2030;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: #4f6ef7;
+      transform: translateY(-2px);
+    }
+
+    .img-wrap {
+      background: #f8fafc;
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      padding: 0.75rem;
+    }
+
+    .img-wrap .fallback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #1e2030;
+      color: #64748b;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .img-wrap img.errored { display: none; }
+    .img-wrap img.errored + .fallback { display: flex; }
+
+    .brand-bar {
+      height: 3px;
+    }
+
+    .info {
+      padding: 1rem 1.1rem 1.2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .brand {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    .model {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.3;
+    }
+
+    .msrp {
+      margin-top: auto;
+      padding-top: 0.75rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .msrp-label {
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .msrp-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .msrp-currency {
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .links {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0 1.1rem 1rem;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      font-size: 0.73rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .links a.primary {
+      background: #1e3a5f;
+      color: #7dd3fc;
+      border-color: #1e4976;
+    }
+
+    .links a.primary:hover { background: #1e4976; }
+
+    .links a.secondary {
+      background: #1a1e2e;
+      color: #94a3b8;
+      border-color: #2d3348;
+    }
+
+    .links a.secondary:hover { border-color: #4f6ef7; color: #c7d2fe; }
+
+    footer {
+      max-width: 900px;
+      margin: 2.5rem auto 0;
+      text-align: center;
+      color: #475569;
+      font-size: 0.8rem;
+    }
+
+    /* brand accent colours */
+    .bell   { background: #e63946; }
+    .shoei  { background: #1d3557; }
+    .hjc    { background: #e63946; }
+    .agv    { background: #f4a261; }
+    .ls2    { background: #2a9d8f; }
+    .nolan  { background: #264653; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>XL Modular Helmet Reference</h1>
+  <p>11 models monitored daily for deals · Size XL only · 40% discount threshold</p>
+  <span class="badge">MSRPs in CAD</span>
+</header>
+
+<div class="grid">
+
+  <!-- Bell SRT Modular -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.bellhelmets.com/dw/image/v2/BGXR_PRD/on/demandware.static/-/Sites-bell-master-catalog/default/dwbce8f77c/images/product/large/BL-7149629_hero.jpg"
+        alt="Bell SRT Modular"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">Bell SRT Modular</span>
+        <a href="https://www.bellhelmets.com/motorcycle/p/srt-modular-street-motorcycle-helmet/BL-7149629.html" target="_blank" style="color:#7dd3fc;margin-top:4px">View on Bell ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar bell"></div>
+    <div class="info">
+      <span class="brand">Bell</span>
+      <span class="model">SRT Modular</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$749</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.bellhelmets.com/motorcycle/p/srt-modular-street-motorcycle-helmet/BL-7149629.html" target="_blank">Bell ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/bell-srt-modular-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/bell-srt-modular-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- Shoei Neotec 3 -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.shoei.com/worldwide/en/helmet/system/neotec_3/image/neotec3_hero.jpg"
+        alt="Shoei Neotec 3"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">Shoei Neotec 3</span>
+        <a href="https://www.shoei.com/worldwide/en/helmet/system/neotec_3/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on Shoei ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar shoei"></div>
+    <div class="info">
+      <span class="brand">Shoei</span>
+      <span class="model">Neotec 3</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$1,100</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.shoei.com/worldwide/en/helmet/system/neotec_3/" target="_blank">Shoei ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/shoei-neotec-3-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/shoei-neotec-3-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- Shoei Neotec 2 -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.shoei.com/worldwide/en/helmet/system/neotec_ii/image/neotec2_hero.jpg"
+        alt="Shoei Neotec 2"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">Shoei Neotec 2</span>
+        <a href="https://www.shoei.com/worldwide/en/helmet/system/neotec_ii/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on Shoei ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar shoei"></div>
+    <div class="info">
+      <span class="brand">Shoei</span>
+      <span class="model">Neotec 2</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$850</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.shoei.com/worldwide/en/helmet/system/neotec_ii/" target="_blank">Shoei ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/shoei-neotec-2-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/shoei-neotec-ii-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- HJC RPHA 91 -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.hjchelmets.com/uploads/2021/04/RPHA91-BK-hero.jpg"
+        alt="HJC RPHA 91"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">HJC RPHA 91</span>
+        <a href="https://www.hjchelmets.com/helmet/rpha-91/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on HJC ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar hjc"></div>
+    <div class="info">
+      <span class="brand">HJC</span>
+      <span class="model">RPHA 91</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$700</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.hjchelmets.com/helmet/rpha-91/" target="_blank">HJC ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/hjc-rpha-91-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/hjc-rpha-91-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- HJC i91 -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.hjchelmets.com/uploads/2022/09/i91-BK-hero.jpg"
+        alt="HJC i91"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">HJC i91</span>
+        <a href="https://www.hjchelmets.com/helmet/i91/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on HJC ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar hjc"></div>
+    <div class="info">
+      <span class="brand">HJC</span>
+      <span class="model">i91</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$500</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.hjchelmets.com/helmet/i91/" target="_blank">HJC ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/hjc-i91-modular-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/hjc-i91-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- HJC i100 -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.hjchelmets.com/uploads/2019/08/i100-BK-hero.jpg"
+        alt="HJC i100"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">HJC i100</span>
+        <a href="https://www.hjchelmets.com/helmet/i100/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on HJC ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar hjc"></div>
+    <div class="info">
+      <span class="brand">HJC</span>
+      <span class="model">i100</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$400</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.hjchelmets.com/helmet/i100/" target="_blank">HJC ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/hjc-i100-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/hjc-i100-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- AGV Sportmodular -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.agv.com/us/en/sportmodular-mono-ece-dot---matt-carbon-201201O4IY003004/_jcr_content/root/container/productcarousel/productcarouselcontainer/productcarouselitem/image.coreimg.jpeg/1680000000000/sportmodular-matt-carbon.jpeg"
+        alt="AGV Sportmodular"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">AGV Sportmodular</span>
+        <a href="https://www.agv.com/us/en/modular/sportmodular/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on AGV ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar agv"></div>
+    <div class="info">
+      <span class="brand">AGV</span>
+      <span class="model">Sportmodular</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$1,100</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.agv.com/us/en/modular/sportmodular/" target="_blank">AGV ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/agv-sportmodular-carbon-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/agv-sportmodular-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- AGV Tourmodular -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.agv.com/us/en/tourmodular/tourmodular.html/_jcr_content/root/container/productcarousel/productcarouselcontainer/productcarouselitem/image.coreimg.jpeg/1680000000000/tourmodular-mplk-hero.jpeg"
+        alt="AGV Tourmodular"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">AGV Tourmodular</span>
+        <a href="https://www.agv.com/us/en/modular/tourmodular/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on AGV ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar agv"></div>
+    <div class="info">
+      <span class="brand">AGV</span>
+      <span class="model">Tourmodular</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$800</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.agv.com/us/en/modular/tourmodular/" target="_blank">AGV ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/agv-tourmodular-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/agv-tourmodular-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- LS2 Advant X -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://ls2helmets.com/wp-content/uploads/2022/09/LS2-Advant-X-FF901-Modular-Helmet-hero.jpg"
+        alt="LS2 Advant X"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">LS2 Advant X</span>
+        <a href="https://ls2helmets.com/helmets/advant-x/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on LS2 ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar ls2"></div>
+    <div class="info">
+      <span class="brand">LS2</span>
+      <span class="model">Advant X</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$550</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://ls2helmets.com/helmets/advant-x/" target="_blank">LS2 ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/ls2-helmets-advant-x-solid-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/ls2-advant-x-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- LS2 Advant X 2 Carbon -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://ls2helmets.com/wp-content/uploads/2023/04/LS2-FF901-Advant-X-Carbon-hero.jpg"
+        alt="LS2 Advant X 2 Carbon"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">LS2 Advant X 2 Carbon</span>
+        <a href="https://ls2helmets.com/helmets/advant-x-carbon/" target="_blank" style="color:#7dd3fc;margin-top:4px">View on LS2 ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar ls2"></div>
+    <div class="info">
+      <span class="brand">LS2</span>
+      <span class="model">Advant X 2 Carbon</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$650</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://ls2helmets.com/helmets/advant-x-carbon/" target="_blank">LS2 ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/ls2-advant-x-carbon-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/ls2-advant-x-carbon-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+  <!-- Nolan N100-5 -->
+  <div class="card">
+    <div class="img-wrap">
+      <img
+        src="https://www.nolanhelmets.com/immagini/prodotti/N100-5/n100-5_hero.jpg"
+        alt="Nolan N100-5"
+        onerror="this.classList.add('errored')"
+      />
+      <div class="fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="1.5"><path d="M12 2C7 2 3 6.5 3 12v3a2 2 0 002 2h14a2 2 0 002-2v-3c0-5.5-4-10-9-10z"/><path d="M3 13h18"/></svg>
+        <span style="margin-top:8px">Nolan N100-5</span>
+        <a href="https://www.nolanhelmets.com/NolanN1005Helmet" target="_blank" style="color:#7dd3fc;margin-top:4px">View on Nolan ↗</a>
+      </div>
+    </div>
+    <div class="brand-bar nolan"></div>
+    <div class="info">
+      <span class="brand">Nolan</span>
+      <span class="model">N100-5</span>
+      <div class="msrp">
+        <span class="msrp-label">MSRP</span>
+        <span class="msrp-price">$650</span>
+        <span class="msrp-currency">CAD</span>
+      </div>
+    </div>
+    <div class="links">
+      <a class="primary" href="https://www.nolanhelmets.com/NolanN1005Helmet" target="_blank">Nolan ↗</a>
+      <a class="secondary" href="https://www.revzilla.com/motorcycle/nolan-n100-5-helmet" target="_blank">RevZilla ↗</a>
+      <a class="secondary" href="https://fortnine.ca/en/nolan-n100-5-solid-helmet" target="_blank">FortNine ↗</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Helmet Deal Finder · 11 models tracked · 13 vendors monitored · XL size · 40% discount threshold</p>
+  <p style="margin-top:0.35rem">Images link to manufacturer / retailer product pages. MSRPs are approximate and may vary.</p>
+</footer>
+
+<script>
+  // If image loads successfully, nothing happens.
+  // onerror on each img handles the fallback inline.
+  // This script is just a safety net to catch any late-loading failures.
+  document.querySelectorAll('.img-wrap img').forEach(img => {
+    if (!img.complete || img.naturalWidth === 0) {
+      img.classList.add('errored');
+    }
+  });
+</script>
+
+</body>
+</html>

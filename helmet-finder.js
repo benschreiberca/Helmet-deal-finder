@@ -26,6 +26,7 @@ const HELMET_MSRPS = {
   'AGV tourmodular':        799.99,
   'LS2 Advant X':           549.99,
   'LS2 Advant X 2 Carbon':  649.99,
+  'Nolan N100-5':           649.99,
 };
 
 const HELMETS = Object.keys(HELMET_MSRPS);
