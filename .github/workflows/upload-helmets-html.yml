@@ -1,0 +1,30 @@
+name: Upload helmets.html to Google Drive
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/fix-helmet-scraping-CgOrb
+    paths:
+      - 'helmets.html'
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Upload helmets.html to Google Drive
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: node upload-to-drive.js
